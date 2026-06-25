@@ -30,14 +30,14 @@ For example, this is a cube:
 ```JavaScript
 let model = {
     vertices: [
-        { x: -1, y: 1, z: -1 },
-        { x: 1, y: 1, z: -1 },
-        { x: 1, y: -1, z: -1 },
-        { x: -1, y: -1, z: -1 },
-        { x: -1, y: 1, z: 1 },
-        { x: 1, y: 1, z: 1 },
-        { x: 1, y: -1, z: 1 },
-        { x: -1, y: -1, z: 1 },
+        new Vector3(-1,  1, -1),
+        new Vector3( 1,  1, -1),
+        new Vector3( 1, -1, -1),
+        new Vector3(-1, -1, -1),
+        new Vector3(-1,  1,  1),
+        new Vector3( 1,  1,  1),
+        new Vector3( 1, -1,  1),
+        new Vector3(-1, -1,  1),
     ],
 
     faces: [
