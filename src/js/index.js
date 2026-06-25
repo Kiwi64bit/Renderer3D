@@ -1,9 +1,5 @@
-// ================ Typedefs ================ //
-/**
- * @typedef {Object} Vector2
- * @property {number} x position on X axis
- * @property {number} y position on Y axis
- */
+import { generateTorus } from "./torus.js";
+import { Vector2 } from "./vector2.js";
 
 /**
  * @typedef {Object} Vector3
@@ -35,10 +31,6 @@
  * @returns {Vector3}
  */
 
-// ================ Imports ================ //
-import { generateTorus } from "./torus.js";
-
-// ================ Initialization ================ //
 /** @type {HTMLCanvasElement} */
 const canvasMain = document.getElementById("canvas");
 
@@ -54,8 +46,6 @@ window.onresize = () => {
     canvasResize(canvasMain, sideLength, sideLength);
     canvasFill(canvasMain, bgColor);
 };
-
-// ================ Model ================ //
 
 /** @type {Model} */
 const Torus = generateTorus();
@@ -74,12 +64,8 @@ const state = {
     },
 };
 
-// ================ Loop ================ //
-
 var lastTime = 0;
 requestAnimationFrame(draw);
-
-// ================ Functions ================ //
 
 /**
  * Starts the program.
@@ -205,7 +191,7 @@ function canvasLine(canvas, start, end, color) {
 function project(point) {
     const x = point.x / point.z;
     const y = point.y / point.z;
-    return { x, y };
+    return new Vector2(x, y);
 }
 
 /**
@@ -218,7 +204,7 @@ function project(point) {
 function toScreen(point, screenWidth, screenHeight) {
     const x = (point.x + 1) * screenWidth * 0.5;
     const y = (1 - point.y) * screenHeight * 0.5;
-    return { x, y };
+    return new Vector2(x, y);
 }
 
 /**
