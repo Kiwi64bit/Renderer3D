@@ -1,12 +1,6 @@
 import { generateTorus } from "./torus.js";
 import { Vector2 } from "./vector2.js";
-
-/**
- * @typedef {Object} Vector3
- * @property {number} x position on X axis
- * @property {number} y position on Y axis
- * @property {number} z position on Z axis
- */
+import { Vector3 } from "./vector3.js";
 
 /**
  * @typedef {Array<number>} Face
@@ -52,16 +46,8 @@ const Torus = generateTorus();
 
 /** @type {Transformation} */
 const state = {
-    translation: {
-        x: 0,
-        y: 0,
-        z: 2.5,
-    },
-    rotation: {
-        x: 0,
-        y: 0,
-        z: 0,
-    },
+    translation: new Vector3(0, 0, 2.5),
+    rotation: new Vector3(0, 0, 0),
 };
 
 var lastTime = 0;
@@ -90,7 +76,7 @@ function draw(currentTime) {
  * @type {TransformFunction}
  */
 function transformPoint(point, transformation) {
-    return translate(rotate(point, transformation.rotation), transformation.translation);
+    return rotate(point, transformation.rotation).add(transformation.translation);
 }
 
 /**
@@ -208,20 +194,6 @@ function toScreen(point, screenWidth, screenHeight) {
 }
 
 /**
- * translate a point by an offset
- * @param {Vector3} point 3D point
- * @param {Vector3} translation Translation on each axis
- * @returns {Vector3} 3D point
- */
-function translate(point, translation) {
-    return {
-        x: point.x + translation.x,
-        y: point.y + translation.y,
-        z: point.z + translation.z,
-    };
-}
-
-/**
  * rotate a point around the X axis.
  * @param {Vector3} point 3D point
  * @param {number} angle angle in radians
@@ -235,7 +207,7 @@ function rotateX(point, angle) {
     const y = point.y * cosTheta - point.z * sinTheta;
     const z = point.y * sinTheta + point.z * cosTheta;
 
-    return { x, y, z };
+    return new Vector3(x, y, z);
 }
 
 /**
@@ -252,7 +224,7 @@ function rotateY(point, angle) {
     const y = point.y;
     const z = point.x * sinTheta + point.z * cosTheta;
 
-    return { x, y, z };
+    return new Vector3(x, y, z);
 }
 
 /**
@@ -269,7 +241,7 @@ function rotateZ(point, angle) {
     const y = point.x * sinTheta + point.y * cosTheta;
     const z = point.z;
 
-    return { x, y, z };
+    return new Vector3(x, y, z);
 }
 
 /**
