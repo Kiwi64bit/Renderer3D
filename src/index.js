@@ -1,6 +1,6 @@
 import { generateTorus } from "./torus.js";
-import { Vector2 } from "./math/vector2.js";
-import { Vector3 } from "./math/vector3.js";
+import { Vector2 } from "./math/Vector2.js";
+import { Vector3 } from "./math/Vector3.js";
 
 /**
  * @typedef {Array<number>} Face
