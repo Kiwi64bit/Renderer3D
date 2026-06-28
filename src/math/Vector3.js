@@ -1,8 +1,5 @@
 /**
  * Represents a 3D vector with arithmetic operations.
- *
- * @class Vector3
- * @typedef {Vector3}
  */
 class Vector3 {
     /**
