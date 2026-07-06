@@ -1,3 +1,4 @@
+import { Vector2 } from "./math/Vector2.js";
 import { Vector3 } from "./math/Vector3.js";
 /**
  * Renders the points of a model.
@@ -136,7 +137,7 @@ function project(point) {
 function toScreen(point, screenWidth, screenHeight) {
     const x = (point.x + 1) * screenWidth * 0.5;
     const y = (1 - point.y) * screenHeight * 0.5;
-    return { x, y };
+    return new Vector2(x, y);
 }
 
 /**
@@ -201,12 +202,6 @@ function rotateZ(point, angle) {
 function rotateXYZ(point, rotation) {
     return rotateZ(rotateY(rotateX(point, rotation.x), rotation.y), rotation.z);
 }
-
-/**
- * @typedef {Object} Vector2
- * @property {number} x - position on X axis.
- * @property {number} y - position on Y axis.
- */
 
 /**
  * @typedef {Array<number>} Face
