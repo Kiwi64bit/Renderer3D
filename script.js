@@ -1,4 +1,5 @@
 import { generateTorus } from "./src/torus.js";
+import { Vector3 } from "./src/math/Vector3.js";
 import { canvasResize, canvasFill, renderModel } from "./src/Renderer3D.js";
 
 const bgColor = "#000000";
@@ -12,8 +13,8 @@ window.onresize = () => resizeAndClear(canvas, bgColor);
 
 const Torus = generateTorus();
 
-const position = { x: 0, y: 0, z: 2.5 };
-const rotation = { x: 0, y: 0, z: 0 };
+const position = new Vector3(0, 0, 2.5);
+const rotation = new Vector3();
 
 var lastTime = 0;
 requestAnimationFrame(draw);

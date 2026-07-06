@@ -1,3 +1,4 @@
+import { Vector3 } from "./math/Vector3.js";
 /**
  * Renders the points of a model.
  *
@@ -8,9 +9,11 @@
  * @param {string} color - Model color.
  */
 function renderVertices(canvas, model, position, rotation, color) {
+    const _v = new Vector3();
     for (const vertex of model.vertices) {
+        _v.set(vertex.x, vertex.y, vertex.z);
         const screenPos = toScreen(
-            project(translate(rotateXYZ(vertex, rotation), position)),
+            project(rotateXYZ(_v, rotation).add(position)),
             canvasMain.width,
             canvasMain.height,
         );
@@ -28,19 +31,23 @@ function renderVertices(canvas, model, position, rotation, color) {
  * @param {string} color - Model color.
  */
 function renderModel(canvas, model, position, rotation, color) {
+    const _v1 = new Vector3();
+    const _v2 = new Vector3();
     for (const face of model.faces) {
         for (let i = 0; i < face.length; i++) {
             const vertex1Index = face[i];
             const vertex2Index = face[(i + 1) % face.length];
             const vertex1 = model.vertices[vertex1Index];
             const vertex2 = model.vertices[vertex2Index];
+            _v1.set(vertex1.x, vertex1.y, vertex1.z);
+            _v2.set(vertex2.x, vertex2.y, vertex2.z);
             const point1 = toScreen(
-                project(translate(rotateXYZ(vertex1, rotation), position)),
+                project(rotateXYZ(vertex1, rotation).add(position)),
                 canvas.width,
                 canvas.height,
             );
             const point2 = toScreen(
-                project(translate(rotateXYZ(vertex2, rotation), position)),
+                project(rotateXYZ(vertex2, rotation).add(position)),
                 canvas.width,
                 canvas.height,
             );
@@ -115,9 +122,7 @@ function canvasLine(canvas, start, end, color) {
  * @returns {Vector2} 2D point.
  */
 function project(point) {
-    const x = point.x / point.z;
-    const y = point.y / point.z;
-    return { x, y };
+    return new Vector3(point.x / point.z, point.y / point.z);
 }
 
 /**
@@ -135,21 +140,6 @@ function toScreen(point, screenWidth, screenHeight) {
 }
 
 /**
- * translate a point by an offset.
- *
- * @param {Vector3} point - 3D point.
- * @param {Vector3} translation - Translation on each axis.
- * @returns {Vector3} 3D point.
- */
-function translate(point, translation) {
-    return {
-        x: point.x + translation.x,
-        y: point.y + translation.y,
-        z: point.z + translation.z,
-    };
-}
-
-/**
  * rotate a point around the X axis.
  *
  * @param {Vector3} point - 3D point.
@@ -164,7 +154,7 @@ function rotateX(point, angle) {
     const y = point.y * cosTheta - point.z * sinTheta;
     const z = point.y * sinTheta + point.z * cosTheta;
 
-    return { x, y, z };
+    return new Vector3(x, y, z);
 }
 
 /**
@@ -182,7 +172,7 @@ function rotateY(point, angle) {
     const y = point.y;
     const z = point.x * sinTheta + point.z * cosTheta;
 
-    return { x, y, z };
+    return new Vector3(x, y, z);
 }
 
 /**
@@ -199,7 +189,7 @@ function rotateZ(point, angle) {
     const y = point.x * sinTheta + point.y * cosTheta;
     const z = point.z;
 
-    return { x, y, z };
+    return new Vector3(x, y, z);
 }
 
 /**
@@ -216,13 +206,6 @@ function rotateXYZ(point, rotation) {
  * @typedef {Object} Vector2
  * @property {number} x - position on X axis.
  * @property {number} y - position on Y axis.
- */
-
-/**
- * @typedef {Object} Vector3
- * @property {number} x - position on X axis.
- * @property {number} y - position on Y axis.
- * @property {number} z - position on Z axis.
  */
 
 /**
