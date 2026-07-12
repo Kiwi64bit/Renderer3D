@@ -34,7 +34,7 @@ class Vector3 {
     }
 
     /**
-     * Sets this instant components.
+     * Sets this instance components.
      *
      * @param {number} x - The x component.
      * @param {number} y - The y component.
@@ -47,6 +47,29 @@ class Vector3 {
         this.z = z;
 
         return this;
+    }
+
+    /**
+     * Copies the components of a vector to this instance.
+     *
+     * @param {Vector3} vector - The vector to copy from.
+     * @returns {Vector3} A reference to this vector.
+     */
+    copy(vector) {
+        this.x = vector.x;
+        this.y = vector.y;
+        this.z = vector.z;
+
+        return this;
+    }
+
+    /**
+     * Creates a clone of this instance.
+     *
+     * @returns {Vector3} A clone of this instance.
+     */
+    clone() {
+        return new Vector3(this.x, this.y, this.z);
     }
 
     /**
@@ -113,8 +136,10 @@ class Vector3 {
      * @returns {Vector3} A reference to this vector.
      */
     applyMatrix4(matrix) {
-        const x = this.x, y = this.y, z = this.z;
-        
+        const x = this.x,
+            y = this.y,
+            z = this.z;
+
         this.x = x * matrix.elements[0] + y * matrix.elements[1] + z * matrix.elements[2] + 1 * matrix.elements[3];
         this.y = x * matrix.elements[4] + y * matrix.elements[5] + z * matrix.elements[6] + 1 * matrix.elements[7];
         this.z = x * matrix.elements[8] + y * matrix.elements[9] + z * matrix.elements[10] + 1 * matrix.elements[11];

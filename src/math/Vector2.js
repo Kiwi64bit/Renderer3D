@@ -26,7 +26,7 @@ class Vector2 {
     }
 
     /**
-     * Sets this instant components.
+     * Sets this instance components.
      *
      * @param {number} x - The x component.
      * @param {number} y - The y component.
@@ -37,6 +37,28 @@ class Vector2 {
         this.y = y;
 
         return this;
+    }
+
+    /**
+     * Copies the components of a vector to this instance.
+     *
+     * @param {Vector2} vector - The vector to copy from.
+     * @returns {Vector2} A reference to this vector.
+     */
+    copy(vector) {
+        this.x = vector.x;
+        this.y = vector.y;
+
+        return this;
+    }
+
+    /**
+     * Creates a clone of this instance.
+     *
+     * @returns {Vector2} A clone of this instance.
+     */
+    clone() {
+        return new Vector2(this.x, this.y);
     }
 
     /**
