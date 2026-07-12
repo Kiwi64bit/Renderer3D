@@ -104,6 +104,23 @@ class Vector3 {
 
         return this;
     }
+
+    /**
+     * Applies a 4x4 transformation matrix to this vector.
+     * Assumes the fourth component is 1.
+     *
+     * @param {Matrix4} matrix - The matrix
+     * @returns {Vector3} A reference to this vector.
+     */
+    applyMatrix4(matrix) {
+        const x = this.x, y = this.y, z = this.z;
+        
+        this.x = x * matrix.elements[0] + y * matrix.elements[1] + z * matrix.elements[2] + 1 * matrix.elements[3];
+        this.y = x * matrix.elements[4] + y * matrix.elements[5] + z * matrix.elements[6] + 1 * matrix.elements[7];
+        this.z = x * matrix.elements[8] + y * matrix.elements[9] + z * matrix.elements[10] + 1 * matrix.elements[11];
+
+        return this;
+    }
 }
 
 export { Vector3 };
