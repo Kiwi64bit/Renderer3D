@@ -1,8 +1,8 @@
 # Renderer3D
 
-This is my attempt at making a simple wireframe 3D renderer using HTML5 canvas.
+This is my attempt at making a simple wireframe 3D renderer.
 
-This project renderer uses perspective division where `x`, and `y` are divided by `z` to give a perspective distortion. It's basic, but does the job.
+This project renderer uses weak perspective projection where `x`, and `y` are divided by `z` to give a perspective distortion. It's basic, but does the job.
 
 ## How to run
 
@@ -22,44 +22,58 @@ Open `index.html` file in you browser and enjoy the mesmerizing show ;)
 
 Initialize a `<canvas>` element to render your model on.
 
-### Second: A model
+### Second: A mesh
 
-The project is very basic. The rendering function only understands an object with a specific format.  
-For example, this is a cube:
+The renderer needs a mesh. A mesh consists of a `Geometry` and a `Color`.
+Use the `Mesh` class and provide a `Geometry` and a `Color`, each is a class that you can instantiate.
+Currently, the project has only a torus geometry using `TorusGeometry` class.
+
+This is an example:
 
 ```JavaScript
-let model = {
-    vertices: [
-        { x: -1, y: 1, z: -1 },
-        { x: 1, y: 1, z: -1 },
-        { x: 1, y: -1, z: -1 },
-        { x: -1, y: -1, z: -1 },
-        { x: -1, y: 1, z: 1 },
-        { x: 1, y: 1, z: 1 },
-        { x: 1, y: -1, z: 1 },
-        { x: -1, y: -1, z: 1 },
-    ],
+const geometry = new TorusGeometry();
+const color = new Color(255, 0, 0, 255);
+const mesh = new Mesh(geometry, color);
 
-    faces: [
-        [0, 1, 2, 3],
-        [4, 5, 6, 7],
-        [0, 1, 5, 4],
-        [3, 2, 6, 7],
-        [0, 3, 7, 4],
-        [1, 2, 6, 5],
-    ],
-};
+renderMesh(canvas, mesh);
 ```
 
-As long as the model is in this format it can be rendered.
+you can create you own geometries using the `Geometry` class.
+For example, this is a cube geometry:
+
+```JavaScript
+const cubeGeometry = new Geometry();
+cubeGeometry.vertices = [
+    new Vector3(-1, 1, -1),
+    new Vector3(1, 1, -1),
+    new Vector3(1, -1, -1),
+    new Vector3(-1, -1, -1),
+    new Vector3(-1, 1, 1),
+    new Vector3(1, 1, 1),
+    new Vector3(1, -1, 1),
+    new Vector3(-1, -1, 1),
+];
+
+cubeGeometry.faces = [
+    [0, 1, 2, 3],
+    [4, 5, 6, 7],
+    [0, 1, 5, 4],
+    [3, 2, 6, 7],
+    [0, 3, 7, 4],
+    [1, 2, 6, 5],
+];
+```
+
+As long as the geometry is in this format the mesh can be rendered.
 
 ### Third: A rendering function
 
-Use `renderModel` function to render a wireframe, or `renderVertices` to render only point.
+Use `renderMesh` function to render a wireframe, or `renderVertices` to render only points.
 
 > Both function are documented in the code.
 
-Fiddle around with the position of the model, using `position` parameter, so it appears on the screen correctly.
+Use `position` attribute of a `Mesh` to change its position, as will as `rotation` for rotations, and `scale` for scaling.
+Make sure to call `updateMatrix` on the `Mesh` to update its transformation matrix, otherwise non of the updated transformation will be applied.
 
 ## Features
 
@@ -67,7 +81,8 @@ In this state, other than looking cool, this program has no features. Maybe you 
 
 ## What's next
 
-- refactor to use OOP.
+- refactor renderer to use OOP.
+- use Canvas as will as SVG for the renderer.
 - Add camera object.
 - Better projection.
 - Better rotations to prevent gimbal lock.
