@@ -1,57 +1,38 @@
 import { Vector2 } from "./math/Vector2.js";
 import { Vector3 } from "./math/Vector3.js";
 import { Matrix4 } from "./math/Matrix4.js";
+import { Mesh } from "./core/Mesh.js";
+
 /**
- * Renders the points of a model.
+ * Renders the points of a mesh.
  *
- * @param {HTMLCanvasElement} canvas - The canvas to draw on.
- * @param {Model} model - The model to render.
- * @param {Matrix4} transformationMatrix - The transformation matrix to apply before rendering.
- * @param {string} color - Model color.
+ * @param {HTMLCanvasElement} canvas - The canvas to render on.
+ * @param {Mesh} mesh - The mesh to render.
  */
-function renderVertices(canvas, model, transformationMatrix, color) {
-    const _v = new Vector3();
-    for (const vertex of model.vertices) {
-        _v.set(vertex.x, vertex.y, vertex.z);
-        const screenPos = toScreen(
-            project(_v.applyMatrix4(transformationMatrix)),
-            canvas.width,
-            canvas.height,
-        );
-        canvasPoint(canvas, screenPos, color);
+function renderVertices(canvas, mesh) {
+    for (const v of mesh.geometry.vertices) {
+        const vertex = v.clone();
+        const screenPos = toScreen(project(vertex.applyMatrix4(mesh.matrix)), canvas.width, canvas.height);
+        canvasPoint(canvas, screenPos, mesh.color.hex);
     }
 }
 
 /**
- * Renders a model as a wireframe.
+ * Renders a mesh as a wireframe.
  *
- * @param {HTMLCanvasElement} canvas - The canvas to draw on.
- * @param {Model} model - The model to render.
- * @param {Matrix4} transformationMatrix - The transformation matrix to apply before rendering.
- * @param {string} color - Model color.
+ * @param {HTMLCanvasElement} canvas - The canvas to render on.
+ * @param {Mesh} mesh - The mesh to render.
  */
-function renderModel(canvas, model, transformationMatrix, color) {
-    const _v1 = new Vector3();
-    const _v2 = new Vector3();
-    for (const face of model.faces) {
+function renderMesh(canvas, mesh) {
+    for (const face of mesh.geometry.faces) {
         for (let i = 0; i < face.length; i++) {
-            const vertex1Index = face[i];
-            const vertex2Index = face[(i + 1) % face.length];
-            const vertex1 = model.vertices[vertex1Index];
-            const vertex2 = model.vertices[vertex2Index];
-            _v1.set(vertex1.x, vertex1.y, vertex1.z);
-            _v2.set(vertex2.x, vertex2.y, vertex2.z);
-            const point1 = toScreen(
-                project(_v1.applyMatrix4(transformationMatrix)),
-                canvas.width,
-                canvas.height,
-            );
-            const point2 = toScreen(
-                project(_v2.applyMatrix4(transformationMatrix)),
-                canvas.width,
-                canvas.height,
-            );
-            canvasLine(canvas, point1, point2, color);
+            const index1 = face[i];
+            const index2 = face[(i + 1) % face.length];
+            const vertex1 = mesh.geometry.vertices[index1].clone();
+            const vertex2 = mesh.geometry.vertices[index2].clone();
+            const point1 = toScreen(project(vertex1.applyMatrix4(mesh.matrix)), canvas.width, canvas.height);
+            const point2 = toScreen(project(vertex2.applyMatrix4(mesh.matrix)), canvas.width, canvas.height);
+            canvasLine(canvas, point1, point2, mesh.color.hex);
         }
     }
 }
@@ -122,7 +103,7 @@ function canvasLine(canvas, start, end, color) {
  * @returns {Vector2} 2D point.
  */
 function project(point) {
-    return new Vector3(point.x / point.z, point.y / point.z);
+    return new Vector2(point.x / point.z, point.y / point.z);
 }
 
 /**
@@ -139,14 +120,4 @@ function toScreen(point, screenWidth, screenHeight) {
     return new Vector2(x, y);
 }
 
-/**
- * @typedef {Array<number>} Face
- */
-
-/**
- * @typedef {Object} Model
- * @property {Array<Vector3>} vertices
- * @property {Array<Face>} faces
- */
-
-export { canvasResize, canvasFill, renderModel, renderVertices };
+export { canvasResize, canvasFill, renderMesh, renderVertices };
