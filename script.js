@@ -1,7 +1,7 @@
 import { canvasResize, canvasFill, renderMesh, renderVertices } from "./src/Renderer3D.js";
 import { Mesh } from "./src/core/Mesh.js";
 import { Color } from "./src/core/Color.js";
-import { TorusGeometry } from "./src/core/TorusGeometry.js";
+import { TorusGeometry } from "./src/geometry/TorusGeometry.js";
 
 const bgColor = "#000000";
 

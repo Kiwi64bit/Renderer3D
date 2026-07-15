@@ -1,5 +1,5 @@
 import { Object3D } from "./Object3D.js";
-import { Geometry } from "./Geometry.js";
+import { Geometry } from "../geometry/Geometry.js";
 import { Color } from "./Color.js";
 
 /**
